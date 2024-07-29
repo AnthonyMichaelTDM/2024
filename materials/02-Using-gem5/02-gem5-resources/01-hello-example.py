@@ -34,9 +34,7 @@ caches = PrivateL1SharedL2CacheHierarchy(
     l2_assoc=16,
 )
 
-processor = SimpleProcessor(
-    cpu_type=CPUTypes.TIMING, num_cores=1, isa=ISA.X86
-)
+processor = SimpleProcessor(cpu_type=CPUTypes.TIMING, num_cores=1, isa=ISA.X86)
 
 board = SimpleBoard(
     processor=processor,
@@ -46,6 +44,8 @@ board = SimpleBoard(
 )
 
 # Add binary to the board
+
+board.set_se_binary_workload(obtain_resource("x86-hello64-static"))  # type: ignore
 
 simulator = Simulator(board=board)
 simulator.run()

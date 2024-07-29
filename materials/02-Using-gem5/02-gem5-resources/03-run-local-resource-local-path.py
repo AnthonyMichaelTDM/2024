@@ -4,7 +4,7 @@ from gem5.components.memory import SingleChannelDDR3_1600
 from gem5.components.processors.cpu_types import CPUTypes
 from gem5.components.processors.simple_processor import SimpleProcessor
 from gem5.isas import ISA
-from gem5.resources.resource import obtain_resource,BinaryResource
+from gem5.resources.resource import obtain_resource, BinaryResource
 from gem5.simulate.simulator import Simulator
 from gem5.utils.requires import requires
 
@@ -31,6 +31,7 @@ board = SimpleBoard(
 )
 
 # Add the binary to the board using `BinaryResource`
+binary = BinaryResource("./pattern")
 
 board.set_se_binary_workload(binary)
 

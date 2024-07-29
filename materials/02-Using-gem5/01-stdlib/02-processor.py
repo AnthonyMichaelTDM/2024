@@ -21,12 +21,29 @@ from gem5.isas import ISA
 from gem5.components.processors.base_cpu_core import BaseCPUCore
 from gem5.components.processors.base_cpu_processor import BaseCPUProcessor
 
-from m5.objects import ArmO3CPU
-from m5.objects import TournamentBP
+from m5.objects import ArmO3CPU  # type: ignore
+from m5.objects import TournamentBP  # type: ignore
+
 
 class MyOutOfOrderCore(BaseCPUCore):
     def __init__(self, width, rob_size, num_int_regs, num_fp_regs):
         super().__init__(ArmO3CPU(), ISA.ARM)
+
+        self.core.fetchWidth = width
+        self.core.decodeWidth = width
+        self.core.renameWidth = width
+        self.core.issueWidth = width
+        self.core.wbWidth = width
+        self.core.commitWidth = width
+
+        self.core.numROBEntries = rob_size
+        self.core.numPhysIntRegs = num_int_regs
+        self.core.numPhysFloatRegs = num_fp_regs
+
+        self.core.branchPred = TournamentBP()
+
+        self.core.LQEntries = 128
+        self.core.SQEntries = 128
 
 
 class MyOutOfOrderProcessor(BaseCPUProcessor):
@@ -39,18 +56,19 @@ class MyOutOfOrderProcessor(BaseCPUProcessor):
         :param num_int_regs: determines the size of the vector/floating point
         register file.
         """
-        pass
+        cores = [MyOutOfOrderCore(width, rob_size, num_int_regs, num_fp_regs)]
+        super().__init__(cores)  # type: ignore
 
 
 main_memory = SingleChannelDDR4_2400(size="2GB")
 
 cache_hierarchy = MESITwoLevelCacheHierarchy(
     l1d_size="16kB",
-    l1d_assoc=8,
+    l1d_assoc=8,  # type: ignore
     l1i_size="16kB",
-    l1i_assoc=8,
+    l1i_assoc=8,  # type: ignore
     l2_size="256kB",
-    l2_assoc=16,
+    l2_assoc=16,  # type: ignore
     num_l2_banks=1,
 )
 
@@ -65,7 +83,7 @@ board = SimpleBoard(
     clk_freq="3GHz",
 )
 
-board.set_workload(obtain_resource("arm-gapbs-bfs-run"))
+board.set_workload(obtain_resource("arm-gapbs-bfs-run"))  # type: ignore
 
 simulator = Simulator(board)
 simulator.run()

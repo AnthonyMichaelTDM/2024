@@ -21,3 +21,28 @@ from gem5.simulate.simulator import Simulator
 
 
 # Your code goes below
+cache_hierarchy = MESITwoLevelCacheHierarchy(
+    l1d_size="16kB",
+    l1d_assoc=8,  # type: ignore
+    l1i_size="16kB",
+    l1i_assoc=8,  # type: ignore
+    l2_size="256kB",
+    l2_assoc=16,  # type: ignore
+    num_l2_banks=1,
+)
+
+memory = SingleChannelDDR4_2400()
+
+processor = SimpleProcessor(cpu_type=CPUTypes.TIMING, num_cores=1, isa=ISA.ARM)
+
+board = SimpleBoard(
+    clk_freq="3GHz",
+    processor=processor,
+    memory=memory,
+    cache_hierarchy=cache_hierarchy,
+)
+
+board.set_workload(obtain_resource("arm-gapbs-bfs-run"))  # type: ignore
+
+sim = Simulator(board=board)
+sim.run()

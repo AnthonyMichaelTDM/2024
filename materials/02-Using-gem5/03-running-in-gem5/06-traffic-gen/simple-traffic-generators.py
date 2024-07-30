@@ -29,11 +29,13 @@ import m5
 from m5.objects import Root
 
 from components.cache_hierarchy import MyPrivateL1SharedL2CacheHierarchy
+from components.hybrid_generator import HybridGenerator
 
 from gem5.components.boards.test_board import TestBoard
 from gem5.components.memory import SingleChannelDDR3_1600
-from gem5.components.processors.linear_generator import LinearGenerator
-from gem5.components.processors.random_generator import RandomGenerator
+
+# from gem5.components.processors.linear_generator import LinearGenerator
+# from gem5.components.processors.random_generator import RandomGenerator
 
 # Run with the following commands
 # cd ./materials/02-Using-gem5/03-running-in-gem5/06-traffic-gen/
@@ -44,6 +46,7 @@ cache_hierarchy = MyPrivateL1SharedL2CacheHierarchy()
 memory = SingleChannelDDR3_1600()
 
 # Add generator here
+generator = HybridGenerator(6)
 
 motherboard = TestBoard(
     clk_freq="3GHz",

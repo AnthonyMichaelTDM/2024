@@ -1,0 +1,29 @@
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (16384 Mbytes) does not match the address range assigned (1024 Mbytes)
+gem5 has encountered a segmentation fault!
+
+--- BEGIN LIBC BACKTRACE ---
+gem5(_ZN4gem515print_backtraceEv+0x30)[0x62374f207490]
+gem5(+0x3d72c85)[0x62374f22fc85]
+/lib/x86_64-linux-gnu/libc.so.6(+0x45320)[0x7621fc199320]
+/lib/x86_64-linux-gnu/libc.so.6(+0x18b75d)[0x7621fc2df75d]
+gem5(+0x3d7beeb)[0x62374f238eeb]
+gem5(_ZN4gem512RedirectPathC2ERKNS_18RedirectPathParamsE+0x10b)[0x62374f2393bb]
+gem5(_ZNK4gem518RedirectPathParams6createEv+0x25)[0x62374f1f30a5]
+gem5(+0x3d3981e)[0x62374f1f681e]
+gem5(+0x1f6d53e)[0x62374d42a53e]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(+0x1dbe88)[0x7621fd828e88]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(_PyObject_MakeTpCall+0x8f)[0x7621fd7cf7af]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(_PyEval_EvalFrameDefault+0x40ee)[0x7621fd76a5ee]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(PyEval_EvalCode+0x20f)[0x7621fd8ea1ff]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(+0x299180)[0x7621fd8e6180]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(+0x1dc4ac)[0x7621fd8294ac]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(PyObject_Vectorcall+0x5c)[0x7621fd7cfafc]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(_PyEval_EvalFrameDefault+0x40ee)[0x7621fd76a5ee]
+gem5(+0x3d74720)[0x62374f231720]
+gem5(main+0x225)[0x62374d26f6b5]
+/lib/x86_64-linux-gnu/libc.so.6(+0x2a1ca)[0x7621fc17e1ca]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x8b)[0x7621fc17e28b]
+gem5(_start+0x25)[0x62374d39d4e5]
+--- END LIBC BACKTRACE ---
+For more info on how to address this issue, please visit https://www.gem5.org/documentation/general_docs/common-errors/ 
+

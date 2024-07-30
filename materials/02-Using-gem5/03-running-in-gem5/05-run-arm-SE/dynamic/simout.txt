@@ -1,0 +1,11 @@
+gem5 Simulator System.  https://www.gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 version 24.0.0.0
+gem5 compiled Jul 25 2024 19:45:59
+gem5 started Jul 30 2024 17:15:12
+gem5 executing on codespaces-7fee64, pid 43170
+command line: gem5 -re --outdir=dynamic 05-run-arm-SE.py --workload-type=dynamic
+
+Time to redirect the library path
+Global frequency set at 1000000000000 ticks per second

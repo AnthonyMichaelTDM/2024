@@ -12,12 +12,14 @@ gem5 run-mem.py
 
 import argparse
 
+from gem5.components.processors.abstract_generator import AbstractGenerator
 from m5.objects import MemorySize
 
 from gem5.components.boards.test_board import TestBoard
 from gem5.components.memory.simple import SingleChannelSimpleMemory
 from gem5.components.memory.single_channel import SingleChannelDDR4_2400
-# from lpddr2 import SingleChannelLPDDR2
+
+from lpddr2 import SingleChannelLPDDR2
 
 from gem5.components.processors.linear_generator import LinearGenerator
 from gem5.components.processors.random_generator import RandomGenerator
@@ -26,7 +28,7 @@ from gem5.simulate.simulator import Simulator
 
 def generator_factory(
     generator_class: str, rd_perc: int, rate, mem_size: MemorySize
-):
+) -> AbstractGenerator:
     rd_perc = int(rd_perc)
     if rd_perc > 100 or rd_perc < 0:
         raise ValueError(
@@ -80,10 +82,16 @@ args = parser.parse_args()
 # Available memory can be found in src/python/gem5/components/memory/
 
 # Fill this in
-
-
+# memory = SingleChannelSimpleMemory(
+#     latency="50ns", bandwidth="32GiB/s", latency_var="10ns", size="8GiB"
+# )
+# memory = SingleChannelDDR4_2400(size="8GiB")
+memory = SingleChannelLPDDR2(size="8GiB")
 generator = generator_factory(
-    args.generator_class, args.read_percentage, args.bandwidth, memory.get_size()
+    args.generator_class,
+    args.read_percentage,
+    args.bandwidth,
+    memory.get_size(),
 )
 
 # We use the Test Board. This is a special board to run traffic generation
@@ -102,7 +110,7 @@ simulator = Simulator(board=board)
 simulator.run()
 
 stats = simulator.get_stats()
-gen_stats = stats['board']['processor']['cores']['value'][0]['generator']
-data = gen_stats['bytesRead']['value'] + gen_stats['bytesWritten']['value']
+gen_stats = stats["board"]["processor"]["cores"]["value"][0]["generator"]
+data = gen_stats["bytesRead"]["value"] + gen_stats["bytesWritten"]["value"]
 print(f"Total data transferred: {data}")
 print(f"Total bandwidth: {data/1_000_000} GB/s")

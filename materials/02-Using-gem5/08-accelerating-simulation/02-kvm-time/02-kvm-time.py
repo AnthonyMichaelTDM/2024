@@ -34,7 +34,7 @@ gem5 -re 02-kvm-time.py
 
 
 from gem5.components.cachehierarchies.classic.private_l1_cache_hierarchy import (
-    PrivateL1CacheHierarchy
+    PrivateL1CacheHierarchy,
 )
 from gem5.components.boards.x86_board import X86Board
 from gem5.components.memory import DualChannelDDR4_2400
@@ -57,21 +57,24 @@ requires(
 )
 
 
-cache_hierarchy = PrivateL1CacheHierarchy(
-    l1d_size="32kB",
-    l1i_size="32kB"
-)
+cache_hierarchy = PrivateL1CacheHierarchy(l1d_size="32kB", l1i_size="32kB")
 
 memory = DualChannelDDR4_2400(size="3GB")
 
 # Here we set up the processor. The SimpleSwitchableProcessor allows for
 # switching between different CPU types during simulation, such as KVM to Timing
 
-#
+processor = SimpleSwitchableProcessor(
+    starting_core_type=CPUTypes.KVM,
+    switch_core_type=CPUTypes.TIMING,
+    isa=ISA.X86,
+    num_cores=2,
+)
 
 # Here we tell the KVM CPU (the starting CPU) not to use perf.
 
-#
+for proc in processor.start:
+    proc.core.usePerf = False
 
 board = X86Board(
     clk_freq="3GHz",
@@ -85,13 +88,29 @@ board.set_workload(obtain_resource("npb-ep-a"))
 # Set up workbegin handler to reset stats and switch to TIMING CPU
 
 
+def workbegin_handler():
+    print("Done booting Linux")
+    m5.stats.dump()
+
+    print("Dump stats")
+    processor.switch()
+
+    simulator.set_max_ticks(1_000_000_000)
+
+    print("Reset stats")
+    m5.stats.reset()
+
+    yield False
+
+
 #
 
 simulator = Simulator(
     board=board,
-# Set up the exit event handlers
-
-#
+    # Set up the exit event handlers
+    on_exit_event={
+        ExitEvent.WORKBEGIN: workbegin_handler(),
+    },
 )
 
 print("Running the simulation")

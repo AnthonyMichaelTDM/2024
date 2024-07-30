@@ -33,7 +33,9 @@ if __name__ == "__m5_main__":
     # get a list of all modules exported by gem5
     modules = m5.__spec__.loader_state
 
-    options = parse_options(("-m " + " -m ".join(modules)).split(" "))
+    options = parse_options(
+        ("-m " + " -m ".join(modules)).split(" ") + ["--output", "typings"]
+    )
     generate_stubs(options)
 
 if __name__ == "__main__":

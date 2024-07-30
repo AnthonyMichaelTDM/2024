@@ -52,26 +52,6 @@ source "qemu" "initialize" {
 build {
   sources = ["source.qemu.initialize"]
 
-  provisioner "file" {
-    destination = "/home/gem5/"
-    source      = "files/exit.sh"
-  }
-
-  provisioner "file" {
-    destination = "/home/gem5/"
-    source      = "files/gem5_init.sh"
-  }
-
-  provisioner "file" {
-    destination = "/home/gem5/"
-    source      = "files/after_boot.sh"
-  }
-
-  provisioner "file" {
-    destination = "/home/gem5/"
-    source      = "files/serial-getty@.service"
-  }
-
   provisioner "shell" {
     execute_command = "echo '${var.ssh_password}' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
     scripts         = ["scripts/post-installation.sh"]

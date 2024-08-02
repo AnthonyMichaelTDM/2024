@@ -11,4 +11,18 @@ from gem5.components.processors.linear_generator import LinearGenerator
 
 from gem5.simulate.simulator import Simulator
 
-# FILL THIS IN
+from hierarchy import PrivateL1SharedL2CacheHierarchy
+
+board = TestBoard(
+    memory=SingleChannelDDR4_2400(size="2GB"),
+    clk_freq="3GHz",
+    generator=LinearGenerator(num_cores=4, max_addr=2**22, rd_perc=75),
+    cache_hierarchy=PrivateL1SharedL2CacheHierarchy(
+        l1_size="32KiB",
+        l1_assoc=8,
+        l2_size="2MiB",
+        l2_assoc=16,
+    ),
+)
+sim = Simulator(board)
+sim.run()
